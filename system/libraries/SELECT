@@ -1,0 +1,35 @@
+SELECT
+  distinct mdl_user.username as EMPLOYEE,
+  mdl_user.firstname as FIRSTNAME,
+  mdl_user.lastname as LASTNAME,
+  mdl_user.department as DEPT,
+  mdl_course_categories.name as CATEGORY,
+  mdl_course.fullname as COURSE,  
+  
+  uid.data AS Authorizer, uid3.data AS SBU, uid5.data AS LOCATION, uid4.data AS GRADE
+FROM mdl_course
+  INNER JOIN mdl_enrol
+    ON mdl_enrol.courseid = mdl_course.id
+  INNER JOIN mdl_user_enrolments
+    ON mdl_user_enrolments.enrolid = mdl_enrol.id
+  INNER JOIN mdl_user
+    ON mdl_user_enrolments.userid = mdl_user.id
+  
+
+JOIN mdl_user_info_data AS uid ON uid.userid = mdl_user.id
+JOIN mdl_user_info_field AS uif ON uid.fieldid = uif.id
+
+JOIN mdl_user_info_data AS uid3 ON uid3.userid = mdl_user.id
+JOIN mdl_user_info_field AS uif3 ON uid3.fieldid = uif3.id
+
+JOIN mdl_user_info_data AS uid4 ON uid4.userid = mdl_user.id
+JOIN mdl_user_info_field AS uif4 ON uid4.fieldid = uif4.id 
+
+JOIN mdl_user_info_data AS uid5 ON uid5.userid = mdl_user.id
+JOIN mdl_user_info_field AS uif5 ON uid5.fieldid = uif5.id 
+
+
+INNER JOIN mdl_course_categories
+    ON mdl_course.category = mdl_course_categories.id
+  
+WHERE  uif.shortname = 'authorizer' and uif3.shortname = 'sbu' and uif4.shortname = 'grade' and uif5.shortname = 'loc' and 1 order by mdl_user.username
